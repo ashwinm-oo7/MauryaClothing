@@ -246,7 +246,7 @@ export default class SignUp extends Component {
 
     if (this.state.otpExpired) {
       this.setState({ otpSent: false });
-      window.location.href = "http://localhost:3000/sign-up";
+      window.location.href = "/sign-up";
       return (
         <div>
           <h2>OTP Expired</h2>

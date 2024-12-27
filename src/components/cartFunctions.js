@@ -325,6 +325,7 @@ export const handleVariantAddToCart = async (
       }
     } else {
       alert("PLease Login!!!");
+      window.location = "/login";
     }
   }
 };
