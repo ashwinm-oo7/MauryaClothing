@@ -1725,7 +1725,7 @@ textarea:focus {
 }
 
 .mean-container a.meanmenu-reveal {
-  top: -100px;
+  top: -45px;
 }
 
 #mobile-menu-active {
@@ -7266,7 +7266,7 @@ a.default-btn {
 }
 @media only screen and (max-width: 767px) {
   .product-tab-list.pt-30, .product-tab-list.pt-55 {
-    padding: 10px 0 30px;
+    padding: -1px 0 30px;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -7292,6 +7292,7 @@ a.default-btn {
   .product-tab-list a {
     margin: 0 11px 5px;
   }
+
 }
 .product-tab-list a h4 {
   font-weight: 500;

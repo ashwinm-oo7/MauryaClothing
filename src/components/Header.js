@@ -117,6 +117,7 @@ const Header = () => {
               <div className="logo" title="" style={{ userSelect: "none" }}>
                 <a href="/">
                   <img
+                    className="maurya-logo-header"
                     src={logo}
                     alt="My-first-design-2"
                     style={{ width: "120px", height: "auto" }}
