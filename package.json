@@ -13,7 +13,7 @@
     "color-namer": "^1.4.0",
     "date-fns": "^3.6.0",
     "fuse.js": "^7.0.0",
-    "html2pdf.js": "^0.10.1",
+    "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.1",
     "jszip": "^3.10.1",
     "multiselect-react-dropdown": "^2.0.25",

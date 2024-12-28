@@ -212,6 +212,9 @@ const Header = () => {
             </div>
             <div className="col-xl-2 col-lg-2 col-md-6 col-8">
               <div className="header-right-wrap">
+                <div className="header-search-small-display">
+                  <Search />
+                </div>
                 {localStorage.getItem("userEmail") ? (
                   <div className="same-style account-satting">
                     <a className="account-satting-active" href="/#">
@@ -226,7 +229,7 @@ const Header = () => {
                                 Logout
                               </a>
                             ) : (
-                              <Link to="/login">login</Link>
+                              <Link to="/login">Login</Link>
                             )}
                           </p>
                         </li>

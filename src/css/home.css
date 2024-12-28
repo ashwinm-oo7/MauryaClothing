@@ -189,7 +189,9 @@ h3 select{
   opacity: 0.5; 
   cursor: not-allowed; /* Change the cursor to indicate that the button is not clickable */
 }
-
+.header-search-small-display{
+  display: none;
+}
 
 @media only screen and (max-width: 768px) {
   /* General Styles for Mobile */
@@ -200,7 +202,17 @@ h3 select{
   .main-menu nav ul li > a {
     font-size: 12px; /* Slightly smaller font size for menu items */
   }
-
+  .header-search-small-display{
+    display: contents;
+  }
+.home-search-disabled-small-screen{
+  display: none;
+}
+.input-home-style{
+  width: 150px !important;
+  font-size: 6px !important;
+  max-width: 200px;
+}
   /* Product Image for Mobile */
   .products-img {
     max-width: 100%;
@@ -313,58 +325,6 @@ h3 select{
   }
 }
 
-@media only screen and (max-width: 480px) {
-  /* Further Refinements for Smaller Screens */
-  .products-img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .product-brandName {
-    font-size: 12px;
-  }
-
-  .slider-single-img img {
-    height: 100px;
-  }
-
-  .feedback-form {
-    padding: 5px;
-  }
-
-  .feedback-form label,
-  .feedback-form textarea,
-  .feedback-form input[type="submit"] {
-    font-size: 10px;
-  }
-
-  .shopping-cart-delete {
-    padding-left: 5px;
-  }
-
-  .quantity-button {
-    width: 20px;
-    height: 20px;
-    font-size: 10px;
-    line-height: 20px;
-  }
-
-  .quantity-display {
-    width: 40px;
-    height: 20px;
-    font-size: 10px;
-  }
-
-  .img-zoom-lens {
-    width: 20px;
-    height: 20px;
-  }
-
-  .img-zoom-result {
-    width: 150px;
-    height: 150px;
-  }
-}
 
 
 

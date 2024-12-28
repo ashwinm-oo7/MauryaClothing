@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "../css/search.css";
 import { filterLatestProducts } from "./cartFunctions";
 import { parse } from "date-fns";
@@ -126,14 +126,12 @@ export default function SearchResults() {
   const [isLoading, setIsLoading] = useState(true);
   const [sortOption, setSortOption] = useState("default");
   const [selectedColor, setSelectedColor] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     const query = searchParams.get("query");
     if (query) {
       setSearchQuery(query.toLowerCase().trim());
     } else {
-      // navigate("/");
       window.location = "/";
     }
   }, [searchParams]);

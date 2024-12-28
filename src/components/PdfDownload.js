@@ -40,6 +40,7 @@ const PdfDownload = () => {
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
+    // eslint-disable-next-line
     html2pdf().from(element).set(options).save();
   };
 

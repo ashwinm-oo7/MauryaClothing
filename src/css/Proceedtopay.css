@@ -305,6 +305,7 @@
   @media (max-width: 768px) {
     .payment-form {
       width: auto; /* Adjust width for smaller screens */
+      font-size: 10px;
     }
   }
   

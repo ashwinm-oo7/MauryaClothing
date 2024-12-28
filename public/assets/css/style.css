@@ -1725,7 +1725,7 @@ textarea:focus {
 }
 
 .mean-container a.meanmenu-reveal {
-  top: -30px;
+  top: -100px;
 }
 
 #mobile-menu-active {
@@ -6983,7 +6983,8 @@ a.default-btn {
   }
 
   .suppoer-area.pb-60 {
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; */
+    display: none !important;
   }
   .suppoer-area.pb-100 {
     padding-bottom: 50px;

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import "./ImageModal.css"; // Optional for styling
-import ReactDOM from "react-dom";
 
 const ImageModal = ({ images, currentIndex, onClose }) => {
   const modalRef = useRef(); // Create a ref for the modal

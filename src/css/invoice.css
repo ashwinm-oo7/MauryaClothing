@@ -113,3 +113,60 @@
       page-break-inside: avoid; /* Avoid page breaks within invoice details */
     }
   }  
+
+  @media (max-width: 768px) {
+    .invoice-container {
+      width: 100%; /* Full width for mobile */
+      margin: 0 auto;
+      padding: 10px; /* Reduce padding for smaller screens */
+      border-radius: 5px; /* Slightly smaller border radius */
+      font-size: 14px; /* Adjust font size for better readability */
+    }
+  
+    .invoice-logo {
+      width: 80px; /* Adjust logo size for mobile */
+      top: 10px; /* Adjust top position */
+      left: 10px; /* Adjust left position */
+    }
+  
+    .invoice-header {
+      font-size: 13px; /* Adjust header font size */
+      margin-bottom: 10px; /* Add some spacing */
+    }
+  
+    .invoice-details {
+      font-size: 12px; /* Adjust font size */
+    }
+  
+    .invoice-section h2 {
+      font-size: 12px; /* Adjust section heading font size */
+    }
+  
+    table {
+      font-size: 12px; /* Adjust table font size */
+    }
+  
+    table th, table td {
+      padding: 5px; /* Reduce padding for table cells */
+    }
+  
+    .total-section {
+      padding: 1px; /* Reduce padding for total section */
+      font-size: 12px; /* Adjust font size */
+    }
+  
+    .total-item {
+      flex-direction: row; /* Stack items vertically */
+      align-items: flex-start; /* Align items to the start */
+    }
+  
+    .label, .cart-shop-total {
+      font-size: 14px; /* Adjust label font size */
+      margin-bottom: 5px; /* Add spacing between stacked items */
+    }
+  
+    .label-total, .label-tax {
+      font-size: 14px; /* Adjust total and tax label font size */
+    }
+  }
+  

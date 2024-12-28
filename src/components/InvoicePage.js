@@ -7,8 +7,8 @@ class InvoicePage extends Component {
   state = {};
 
   render() {
-    const { paymentDetails, cart, size } = this.props;
-
+    const { paymentDetails, cart } = this.props;
+    // const{size}=this.props;
     // Destructure paymentDetails object
     const {
       InvoiceNumber,

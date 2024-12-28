@@ -78,6 +78,8 @@ const ProceedToPay = () => {
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
+
+    // eslint-disable-next-line
     html2pdf().from(element).set(options).save();
   };
 
@@ -436,17 +438,14 @@ const ProceedToPay = () => {
         )}
         {isVisiblity && cart && initialCart && (
           <div className="payment-form ">
-            <strong style={{ marginRight: "110px" }}>
+            {/* <strong style={{ marginRight: "110px" }}>
               <FaUser /> User Email :{" "}
             </strong>
-            <strong>{localStorage.getItem("userEmail")}</strong>
+            <strong>{localStorage.getItem("userEmail")}</strong> */}
             <br />
             {initialCart &&
               initialCart.map((item, index) => (
                 <div key={index}>
-                  <strong style={{ marginRight: "180px" }}> Size :</strong>
-                  <strong>{item.selectedSizes || ""}</strong>
-                  <br />
                   <strong style={{ marginRight: "120px" }}>Brand Name :</strong>
                   <strong>{item.brandName}</strong>
                   <br />
@@ -458,6 +457,9 @@ const ProceedToPay = () => {
                   <br />
                   <strong style={{ marginRight: "145px" }}>Quantity :</strong>
                   <strong>{item.variantQuantity}</strong>
+                  <br />
+                  <strong style={{ marginRight: "180px" }}> Size :</strong>
+                  <strong>{item.selectedSizes || ""}</strong>
                   <br />
                   <strong style={{ marginRight: "145px" }}>Price/pcs :</strong>
                   <strong>{item.variantPrice}</strong>

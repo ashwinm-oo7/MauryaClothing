@@ -56,6 +56,7 @@ export default function Search(props) {
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
       <input
+        className="input-home-style"
         style={{
           borderRadius: "30px",
           width: "400px",

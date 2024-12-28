@@ -78,6 +78,8 @@ const HomePage = () => {
             "Invalid cart data in localStorage, clearing data.",
             error
           );
+          setCx(cx);
+          setCy(cy);
           localStorage.removeItem("cart");
           setCart([]);
         }
@@ -1079,19 +1081,21 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-          <input
-            style={{
-              borderRadius: "30px",
-              width: "500px",
-              marginLeft: "20px",
-              backgroundColor: "white",
-            }}
-            type="text"
-            placeholder="Search any type then press enter"
-            value={searchInput}
-            onChange={handleSearchInputChange}
-            onKeyPress={handleSearchKeyPress}
-          />
+          <div className="home-search-disabled-small-screen">
+            <input
+              style={{
+                borderRadius: "30px",
+                width: "500px",
+                marginLeft: "20px",
+                backgroundColor: "white",
+              }}
+              type="text"
+              placeholder="Search any type then press enter"
+              value={searchInput}
+              onChange={handleSearchInputChange}
+              onKeyPress={handleSearchKeyPress}
+            />
+          </div>
           <div className="product-area pb-60">
             <div className="container">
               <div className="search">
@@ -1151,6 +1155,7 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+
           <div className="blog-area pb-55">
             <div className="container">
               <div className="section-title text-center mb-55">
