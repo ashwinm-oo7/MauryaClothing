@@ -96,9 +96,9 @@
     text-align: center; 
     height: 300px;
   }
-  select {
-    width: 190px; /* Adjust the width as needed */
-  }
+  /* select {
+    width: 190px; 
+  } */
   
   .puncture-repair-list-header {
     display: flex;

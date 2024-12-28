@@ -233,3 +233,33 @@
 
     transition: transform 0.3s ease;
 }
+.extra-small-screen-scroll{
+  display: inline-block;
+  max-width: 500px; /* Adjust based on the maximum width you prefer */
+  overflow-x: auto; /* Enable horizontal scroll if text overflows */
+
+  white-space: pre-wrap; /* Allow wrapping and preserve spaces */
+  color: red; /* Maintain the red text color */
+  padding: 10px; /* Optional for spacing */
+  border: 1px solid #ccc; /* Optional for visual indication */
+
+}
+@media only screen and (max-width: 768px) {
+  .small-screen-select {
+    width: 75px !important;
+  }
+  .sort-title-container {
+  height: 2px;
+  }
+  .extra-small-screen-scroll{
+    display: inline-block;
+    max-width: 200px; /* Adjust based on the maximum width you prefer */
+    overflow-x: auto; /* Enable horizontal scroll if text overflows */
+    word-break: break-word; /* Break long words into new lines */
+    white-space: pre-wrap; /* Allow wrapping and preserve spaces */
+    padding: 6px; /* Optional for spacing */
+    border: 1px solid #ccc; /* Optional for visual indication */
+  
+  }
+
+}

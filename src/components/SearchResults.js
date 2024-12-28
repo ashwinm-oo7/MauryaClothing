@@ -461,7 +461,12 @@ export default function SearchResults() {
           {/* <p className="labelsssssssss" htmlFor="sort">
             Sort_by:{" "}
           </p> */}
-          <select id="sort" value={sortOption} onChange={handleSortChange}>
+          <select
+            className="small-screen-select"
+            id="sort"
+            value={sortOption}
+            onChange={handleSortChange}
+          >
             <option value="default">Default</option>
             <option value="priceLowToHigh">Price: Low to High</option>
             <option value="priceHighToLow">Price: High to Low</option>
@@ -479,7 +484,12 @@ export default function SearchResults() {
               ? `${relatedProducts.length.toLocaleString()}`
               : `${filteredProducts?.length.toLocaleString()}`}{" "}
             {noResults ? "Related Results for" : "Search Results for"}{" "}
-            <span style={{ color: "red" }}>"{searchQuery}"</span>
+            <span
+              className="extra-small-screen-scroll"
+              style={{ color: "red" }}
+            >
+              "{searchQuery}"
+            </span>
           </>
         </h2>
       </div>
