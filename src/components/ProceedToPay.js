@@ -47,6 +47,7 @@ const ProceedToPay = () => {
   const [isVisiblity, setIsVisiblity] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
+  const [upiLink, setUpiLink] = useState("");
 
   const { SubTotal, finalAmount, Tax, initialCart, size } =
     location.state || {};
@@ -67,6 +68,27 @@ const ProceedToPay = () => {
   const calculateTotalQuantity = async (cart) => {
     const total = cart.reduce((acc, item) => acc + item.variantQuantity, 0);
     await setTotalQuantity(total);
+  };
+
+  const handlePaymentRequest = async () => {
+    try {
+      if (!upiID) {
+        alert("Please enter your UPI ID.");
+        return;
+      }
+
+      const response = await fetch(
+        process.env.REACT_APP_API_URL +
+          `payment/generate-upi-link?amount=${finalAmount}&upiId=${upiID}`
+      );
+      // const responses = await fetch(
+      //   `http://localhost:4000/generate-upi-link?amount=${finalAmount}`
+      // );
+      const data = await response.json();
+      setUpiLink(data.upiLink);
+    } catch (error) {
+      console.error("Error generating UPI link:", error);
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -670,6 +692,24 @@ const ProceedToPay = () => {
                           borderColor: upiID ? "" : "red",
                         }}
                       />
+                      <button
+                        onClick={handlePaymentRequest}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Generate Payment Link
+                      </button>
+                      {upiLink && (
+                        <div style={{ marginTop: "20px" }}>
+                          <p>Click the link below to pay:</p>
+                          <a
+                            href={upiLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Pay Now
+                          </a>
+                        </div>
+                      )}
                       {upiID ? null : (
                         <p style={{ color: "red" }}>
                           Please enter a valid UPI ID format: UserName@BankName
