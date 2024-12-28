@@ -139,7 +139,8 @@
     }
   
     .invoice-section h2 {
-      font-size: 12px; /* Adjust section heading font size */
+      font-size: 18px;
+      font-weight: bold;
     }
   
     table {

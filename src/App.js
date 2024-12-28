@@ -8,8 +8,7 @@ import AddBrand from "./components/AddBrand";
 // import { ToastContainer } from "react-toastify";
 import AddProduct from "./components/AddProduct";
 import ProductList from "./components/ProductList";
-import PunctureRepair from "./components/PunctureRepair";
-import PunctureRepairList from "./components/PunctureRepairList";
+
 import Feedback from "./components/Feedback";
 import MyAccount from "./components/MyAccount";
 import CartPage from "./components/CartPage";
@@ -72,17 +71,11 @@ const Home = (props) => {
           <Route path="add-brand" element={<AddBrand />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="product-list" element={<ProductList />} />
-          <Route path="puncture-repair" element={<PunctureRepair />} />
           <Route path="proceedToPay" element={<ProceedToPay />} />
           <Route path="invoice-page" element={<InvoicePage />} />
           <Route path="header" element={<Header />} />
           <Route path="/search-results" element={<SearchResults />} />
-          {isAdmin ? (
-            <Route
-              path="puncture-repair-list"
-              element={<PunctureRepairList />}
-            />
-          ) : null}
+
           <Route path="feedback-list" element={<Feedback />} />
           {userEmail ? (
             <Route path="myAccount" element={<MyAccount />} />

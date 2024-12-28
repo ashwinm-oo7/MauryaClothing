@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Maurya.in E-Commerce Project
 
 Welcome to the Maurya.in E-Commerce Project repository! This project is built using React.js for the frontend.
@@ -16,10 +16,6 @@ This project aims to create an e-commerce platform specialized in selling clothi
 ### Product Management
 
 - **Add, Edit, and Delete Products**: Vendors can manage their product inventory by adding new products, editing existing ones, and deleting outdated ones.
-
-### Live Location Service
-
-- **Instant Service**: Customers can access instant services such as puncture repair based on their live location.
 
 ### Admin Panel
 
@@ -62,8 +58,6 @@ The project structure is organized as follows:
     - `AddBrand.js`
     - `AddProduct.js`
     - `ProductList.js`
-    - `PunctureRepair.js`
-    - `PunctureRepairList.js`
   - `icons/`: Contains icon images used in the application.
   - `css/`: Contains CSS files for styling the application.
   - `App.js`: Main component rendering the application routes.
@@ -141,39 +135,13 @@ The project structure is organized as follows:
 - **Components**: 
   - `ProductList`: Renders the list of products available in the store.
 
-### 13. PunctureRepair.js
-- **Purpose**: Allows customers to request puncture repair services.
-- **Components**: 
-  - `PunctureRepair`: Renders a form for customers to request puncture repair services.
-- **Functionality**:
-  - Captures customer's live location using geolocation API.
-  - Sends repair request to the nearest service center.
-  - Confirmation message with estimated arrival time.
-
-### 14. PunctureRepairList.js
-- **Purpose**: Allows admin users to view the list of puncture repair requests.
-- **Components**: 
-  - `PunctureRepairList`: Renders the list of puncture repair requests.
-- **Functionality**:
-  - Access restricted to admin users only.
-  - Displays detailed information about each repair request.
-  - Admins can track the status of repair requests and take necessary actions.
 
 
 
 ## Instant Service with Live Location
 
-- **Puncture Repair Service**:
-  - Enables customers to request puncture repair services.
-  - Captures customer's live location using geolocation API.
-  - Sends repair request to the nearest service center.
-  - Confirmation message with estimated arrival time.
 
-- **Live Location Tracking**:
-  - Provides real-time tracking of service vehicles.
-  - Accessible to both customers and service center staff.
-  - Service vehicles equipped with GPS trackers.
-  - Updates vehicle locations in real-time on the map.
+
 ## Product Management by Vendors
 
 - **Product Creation**: 
@@ -286,10 +254,9 @@ async function connectDatabase() {
 }
 
 module.exports = { connectDatabase };
+```
 
-
-=======
-# Project Name: Start
+## Project Name: E-commerce online store
 
 ## Description
 This project is a product and category based  Node.js application with various dependencies to handle server-side operations such as file handling, database connections, API integrations, and more. It leverages popular libraries like `express`, `mongoose`, `redis`, and `socket.io` to provide scalable and efficient functionalities.
@@ -462,4 +429,4 @@ See the full list of dependencies in `package.json`. Major dependencies include:
 
 ## License
 This project is licensed under the ISC License.
->>>>>>> 771aaa3087617322c91040c794a2f421742d7044
+

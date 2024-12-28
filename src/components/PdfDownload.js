@@ -55,7 +55,7 @@ const PdfDownload = () => {
       const response = await axios.get(
         `${apiUrl}payment/getInvoice?userEmail=${userEmail}`
       );
-
+      console.log("/getInvoice", response);
       if (response && response.data && Array.isArray(response.data)) {
         setInvoices(response.data.reverse());
       } else {
@@ -151,6 +151,11 @@ const PdfDownload = () => {
                   {invoice.paymentStatus && (
                     <p>
                       <strong>Payment Status : </strong> {invoice.paymentStatus}
+                    </p>
+                  )}
+                  {invoice.transactionId && (
+                    <p>
+                      <strong>TransactionId: </strong> {invoice.transactionId}
                     </p>
                   )}
                 </div>

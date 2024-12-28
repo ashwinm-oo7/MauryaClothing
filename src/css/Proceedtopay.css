@@ -307,5 +307,8 @@
       width: auto; /* Adjust width for smaller screens */
       font-size: 10px;
     }
+    .payment-form input[type="text"], .payment-form select {
+      width: 137px;
+    }  
   }
   

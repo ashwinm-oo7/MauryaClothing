@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/Proceedtopay.css";
 import {
-  FaUser,
+  // FaUser,
   FaRupeeSign,
   FaMapMarkerAlt,
   FaCreditCard,
@@ -48,6 +48,8 @@ const ProceedToPay = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [upiLink, setUpiLink] = useState("");
+  const [qrCode, setQrCode] = useState("");
+  const [transactionId, setTransactionId] = useState("");
 
   const { SubTotal, finalAmount, Tax, initialCart, size } =
     location.state || {};
@@ -72,22 +74,50 @@ const ProceedToPay = () => {
 
   const handlePaymentRequest = async () => {
     try {
-      if (!upiID) {
-        alert("Please enter your UPI ID.");
+      if (!finalAmount || isNaN(finalAmount) || finalAmount <= 0) {
+        alert("Please enter a valid amount greater than zero.");
         return;
       }
 
-      const response = await fetch(
+      const apiUrl =
         process.env.REACT_APP_API_URL +
-          `payment/generate-upi-link?amount=${finalAmount}&upiId=${upiID}`
-      );
-      // const responses = await fetch(
-      //   `http://localhost:4000/generate-upi-link?amount=${finalAmount}`
-      // );
+        `payment/generate-upi-link?amount=${encodeURIComponent(finalAmount)}`;
+
+      // Fetch request to generate UPI link
+      const response = await fetch(apiUrl);
+
+      // Handle non-200 HTTP responses
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        console.error("Server error:", errorDetails);
+        alert(
+          `Error: ${errorDetails.message || "Unable to generate UPI link."}`
+        );
+        return;
+      }
+
+      // Parse response JSON
       const data = await response.json();
-      setUpiLink(data.upiLink);
+
+      if (data.upiLink && data.qrCode) {
+        setUpiLink(data.upiLink);
+        setQrCode(data.qrCode);
+        alert("UPI link generated successfully.");
+      } else {
+        console.error("Invalid response format:", data);
+        alert("Failed to generate UPI link. Please try again.");
+      }
     } catch (error) {
-      console.error("Error generating UPI link:", error);
+      // Handle network errors and unexpected issues
+      if (error.name === "TypeError") {
+        console.error("Network error:", error);
+        alert(
+          "Network error: Please check your internet connection and try again."
+        );
+      } else {
+        console.error("Unexpected error:", error);
+        alert("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -192,8 +222,10 @@ const ProceedToPay = () => {
     }
 
     if (paymentMethod === "Online") {
-      if (!selectedUPIApp && !upiID) {
-        alert("Please select either Your UPI Apps or provide UPI ID.");
+      if (!selectedUPIApp && !upiID && !upiLink && !qrCode) {
+        alert(
+          "Please select either Your UPI Apps or provide UPI ID or Generate UPI Link."
+        );
         return;
       }
       if (selectedUPIApp && !mobileNumber) {
@@ -201,6 +233,10 @@ const ProceedToPay = () => {
         return false;
       } else {
         setMobileNumberError("");
+      }
+      if (upiLink && !transactionId) {
+        alert("Please enter a transactionId");
+        return false;
       }
     }
 
@@ -244,6 +280,7 @@ const ProceedToPay = () => {
             ...(expiryMonth &&
               expiryYear && { expiryDates: `${expiryMonth}/${expiryYear}` }),
             ...(paymentUpdate && { paymentUpdate }),
+            ...(transactionId && { transactionId }),
             // pdfData: document.getElementById("payment-container").innerHTML,
           }),
         }
@@ -636,6 +673,7 @@ const ProceedToPay = () => {
                     }}
                   >
                     <option value="">Select UPI Payment Option</option>
+                    <option value="GenerateUPILink">Generate UPI Link </option>
                     <option value="Your UPI Apps">Your UPI Apps</option>
                     <option value="UPI ID">UPI ID</option>
                   </select>
@@ -692,6 +730,17 @@ const ProceedToPay = () => {
                           borderColor: upiID ? "" : "red",
                         }}
                       />
+                      {upiID ? null : (
+                        <p style={{ color: "red" }}>
+                          Please enter a valid UPI ID format: UserName@BankName
+                          or PhoneNumber@BankName
+                        </p>
+                      )}
+                    </>
+                  )}
+                  {upiPaymentOption === "GenerateUPILink" && (
+                    <>
+                      <br />
                       <button
                         onClick={handlePaymentRequest}
                         style={{ marginLeft: "10px" }}
@@ -710,10 +759,29 @@ const ProceedToPay = () => {
                           </a>
                         </div>
                       )}
-                      {upiID ? null : (
+                      {qrCode && (
+                        <div>
+                          <p>Scan the QR code to pay:</p>
+                          <img src={qrCode} alt="UPI QR Code" />
+                        </div>
+                      )}{" "}
+                      <br />
+                      <strong>
+                        Transaction ID<span style={{ color: "red" }}>*</span> :{" "}
+                      </strong>
+                      <input
+                        type="text"
+                        value={transactionId}
+                        onChange={(e) => setTransactionId(e.target.value)}
+                        placeholder="Enter Transaction ID"
+                        style={{
+                          marginLeft: "40px",
+                          borderColor: transactionId ? "" : "red",
+                        }}
+                      />
+                      {transactionId ? null : (
                         <p style={{ color: "red" }}>
-                          Please enter a valid UPI ID format: UserName@BankName
-                          or PhoneNumber@BankName
+                          Please enter a valid transaction ID format
                         </p>
                       )}
                     </>
