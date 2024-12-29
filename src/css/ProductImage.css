@@ -317,7 +317,7 @@ button svg {
     font-size: 8px;
   }
   
-  .tab-content {
+  .tab-content-brand {
     width: 100%;
     /* display: flex; */
     flex-direction: column;

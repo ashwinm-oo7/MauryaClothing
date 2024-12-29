@@ -1096,7 +1096,10 @@ const HomePage = () => {
               onKeyPress={handleSearchKeyPress}
             />
           </div>
-          <div className="product-area pb-60">
+          <div
+            style={{ backgroundColor: "white" }}
+            className="product-area pb-60"
+          >
             <div className="container">
               <div className="search">
                 {searchResultsShow && (

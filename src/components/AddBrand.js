@@ -228,7 +228,7 @@ const AddBrand = () => {
             </button>
           </div>
 
-          <div className="tab-content">
+          <div className="tab-content-brand">
             {activeTab === "ADD-PRODUCT" && (
               <div>
                 <AddProduct />
