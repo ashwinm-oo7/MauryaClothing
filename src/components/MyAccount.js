@@ -68,9 +68,9 @@ const MyAccount = () => {
         process.env.REACT_APP_API_URL + `user/profile/${userId}`
       );
 
-      console.log("RES", response);
       if (response.ok) {
         const userData = await response.json();
+        console.log("RES", userData);
         toast.success("User profile");
         setFirstName(userData.firstName);
         setLastName(userData.lastName);

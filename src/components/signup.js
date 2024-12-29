@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-// import tyreLogo from "../icons/tyrelogo.jpg";
+import React, { useState, useEffect, useCallback } from "react";
 import "../css/signup.css";
 import { toast } from "react-toastify";
 import logo from "../icons/maurya.png";
-
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import {
   FaUserLock,
   FaUser,
@@ -14,71 +13,62 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-// import { Navigate } from "react-router-dom";
+import GoogleSingup from "./GoogleSingup";
 
-export default class SignUp extends Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    pinCode: 0,
-    age: 0,
-    password: "",
-    redirectToHome: false,
-    otp: "",
-    redirectToLogin: false,
-    otpSent: false, // Track if OTP is sent
-    otpExpired: false, // Track if OTP is expired
-    countdown: 60, // Initial countdown value in seconds
-    showPassword: false, // Track password visibility
-    isProcessing: false,
-  };
-  componentDidMount() {
+const SignUp = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpExpired, setOtpExpired] = useState(false);
+  const [countdown, setCountdown] = useState(60);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [redirectToHome, setRedirectToHome] = useState(false);
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  console.log("ClientID", clientId);
+  useEffect(() => {
     const isLoggedIn = localStorage.getItem("userId");
     if (isLoggedIn) {
-      this.setState({ redirectToHome: true });
+      setRedirectToHome(true);
     }
-  }
-  startCountdown = () => {
-    // Update the countdown timer every second
-    this.interval = setInterval(() => {
-      // Decrease countdown value by 1 second
-      this.setState((prevState) => ({
-        countdown: prevState.countdown - 1,
-      }));
+  }, []);
 
-      // Check if countdown reaches 0
-      if (this.state.countdown <= 0) {
-        // Stop the countdown
-        clearInterval(this.interval);
-        // Set OTP as expired
-        this.setState({ otpExpired: true });
-      }
-    }, 1000); // 1000 milliseconds = 1 second
+  useEffect(() => {
+    let interval;
+    if (otpSent && !otpExpired) {
+      interval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    if (countdown <= 0) {
+      clearInterval(interval);
+      setOtpExpired(true);
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, otpExpired, countdown]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "firstName") setFirstName(value);
+    if (name === "lastName") setLastName(value);
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
+    if (name === "otp") setOtp(value);
   };
 
-  componentWillUnmount() {
-    // Clear the interval when the component is unmounted
-    clearInterval(this.interval);
-  }
-
-  handleInputChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-  togglePasswordVisibility = () => {
-    this.setState((prevState) => ({
-      showPassword: !prevState.showPassword,
-    }));
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
-  signUp = async (e) => {
+  const signUp = async (e) => {
     e.preventDefault();
-    console.log("HELLLO : ", this.state);
     const passwordRegex =
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@])[0-9a-zA-Z@]{8,}$/;
 
-    if (!passwordRegex.test(this.state.password)) {
+    if (!passwordRegex.test(password)) {
       toast.info(
         "Password must contain at least 8 characters, including one uppercase, one lowercase, one digit, and one special character '@'."
       );
@@ -86,7 +76,6 @@ export default class SignUp extends Component {
     }
 
     try {
-      // Check if email already exists in the database
       const emailExistsResponse = await fetch(
         process.env.REACT_APP_API_URL + "user/emailExists",
         {
@@ -95,7 +84,7 @@ export default class SignUp extends Component {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify({ email: this.state.email }),
+          body: JSON.stringify({ email }),
         }
       );
       const emailExistsData = await emailExistsResponse.json();
@@ -105,15 +94,6 @@ export default class SignUp extends Component {
         return;
       }
 
-      if (!passwordRegex.test(this.state.password)) {
-        toast.warning(
-          "Password must contain at least 8 characters, including one uppercase, one lowercase, one digit, and one special character '@'."
-        );
-        return;
-      }
-
-      // Proceed with signup if email doesn't exist
-
       const response = await fetch(
         process.env.REACT_APP_API_URL + "user/signup",
         {
@@ -122,41 +102,24 @@ export default class SignUp extends Component {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email,
-            password: this.state.password,
-          }),
+          body: JSON.stringify({ firstName, lastName, email, password }),
         }
       );
-      this.setState({
-        firstName: "",
-        lastName: "",
-        password: "",
-      });
-      console.log("response:::::::::::", response);
+
       if (response.status === 201) {
-        this.setState({ otpSent: true });
-        this.startCountdown();
-        toast.success("Otp send  successfully", 200);
-
-        console.log("Otp send successfully");
-        // Redirect or perform any other actions after successful registration
+        setOtpSent(true);
+        toast.success("OTP sent successfully");
       } else {
-        toast.warning("Incorrect Credentials");
-
-        console.error("Failed to register user");
+        toast.warning("Failed to register user");
       }
     } catch (error) {
       toast.warning("Something went wrong");
-
       console.error("Error during user registration:", error);
     }
   };
 
-  verifyOTP = async (event) => {
-    event.preventDefault();
+  const verifyOTP = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch(
         process.env.REACT_APP_API_URL + "user/verify-otp",
@@ -165,18 +128,17 @@ export default class SignUp extends Component {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: this.state.email,
-            otp: this.state.otp,
-          }),
+          body: JSON.stringify({ email, otp }),
         }
       );
-      this.setState({ isProcessing: true });
+
+      setIsProcessing(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      this.setState({ isProcessing: false });
+      setIsProcessing(false);
 
       if (response.ok) {
-        this.setState({ email: "", otp: "" });
+        setEmail("");
+        setOtp("");
         toast.success("OTP verified successfully");
         window.location.href = "/login";
       } else {
@@ -188,180 +150,225 @@ export default class SignUp extends Component {
     }
   };
 
-  render() {
-    if (this.state.redirectToHome) {
-      setTimeout(() => {
-        // Navigate("/");
-        window.location = "/";
-        window.location = process.env.REACT_APP_API_URL_FOR_GUI;
-      }, 10); // 3000 milliseconds = 3 seconds
+  const redirectToHomePage = useCallback(() => {
+    setTimeout(() => {
+      window.location = "/";
+    }, 10);
+  }, []);
 
-      return (
-        <div>
-          <img
-            src="https://i.ibb.co/M23HzTF/9-Qgzvh-Logo-Makr.png"
-            alt="Redirecting..."
-          />
-        </div>
-      );
-    }
-    if (this.state.otpSent && !this.state.otpExpired) {
-      return (
-        <div>
-          {this.state.isProcessing && (
-            <div className="overlay">
-              <div className="processing-modal">
-                <div className="spinner"></div>
-                <p>
-                  <div className="processing">Processing</div>
-                  <span className="dot">.</span>
-                  <span className="dot">.</span>
-                  <span className="dot">.</span>
-                </p>
-              </div>
-            </div>
-          )}
-          <h2>Enter OTP</h2>
-          <form onSubmit={this.verifyOTP}>
-            <div className="form-group">
-              <p>Time left to verify OTP: {this.state.countdown} seconds</p>
-              <label htmlFor="otp">OTP:</label>
-              <input
-                type="text"
-                className="form-control"
-                id="otp"
-                name="otp"
-                value={this.state.otp}
-                onChange={this.handleInputChange}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Verify OTP
-            </button>
-          </form>
-        </div>
-      );
-    }
+  const handleSuccess = async (credentialResponse) => {
+    try {
+      console.log(credentialResponse);
+      // Validate Google credentialResponse
+      if (!credentialResponse || !credentialResponse.credential) {
+        toast.error("Invalid Google response. Please try again.");
+        return;
+      }
+      const googleCredential = credentialResponse.credential;
 
-    if (this.state.otpExpired) {
-      this.setState({ otpSent: false });
-      window.location.href = "/sign-up";
-      return (
-        <div>
-          <h2>OTP Expired</h2>
-          <p>
-            The OTP has expired.also SignUP expired due to verification Please
-            sign up again.
-          </p>
-          {/* You can use React Router for navigation */}
-        </div>
+      // Send the token to your backend for verification
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + "user/google-signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: googleCredential }),
+        }
       );
-    }
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error verifying token:", errorData);
+        toast.error(errorData.message || "Google Sign-In failed.");
+        return;
+      }
+
+      const userData = await response.json();
+      // Save user details in localStorage or state (based on your logic)
+      localStorage.setItem("userId", userData._id);
+      localStorage.setItem("userEmail", userData.email);
+      localStorage.setItem("isAdmin", userData.isAdmin);
+      toast.success("Google Sign-In successful!");
+      window.location.href = "/home"; // Redirect to the home page
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+      toast.error("An error occurred during Google Sign-In. Please try again.");
+    }
+  };
+
+  const handleError = () => {
+    toast.error(
+      "Google Sign-In failed. Please check your internet connection or try again."
+    );
+  };
+
+  useEffect(() => {
+    if (redirectToHome) {
+      redirectToHomePage();
+    }
+  }, [redirectToHome, redirectToHomePage]);
+
+  if (redirectToHome) {
     return (
-      // <div className="login-container">
-      // <div className="form-wrapper">
-      <form className="forms">
-        <a href="/">
-          <img
-            height={100}
-            width={100}
-            // src="https://i.ibb.co/M23HzTF/9-Qgzvh-Logo-Makr.png"
-            src={logo}
-            alt="Tyre Logo"
-            className="tyre-logo"
-          />
-        </a>
-
-        <h3>
-          <FaUserLock style={{ marginRight: "5px" }} />
-          Sign Up
-        </h3>
-
-        <div className="mb-3">
-          <label>
-            <FaUser style={{ marginRight: "5px" }} />
-            First name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="First name"
-            value={this.state.firstName}
-            onChange={(e) => this.setState({ firstName: e.target.value })}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>
-            <FaUser style={{ marginRight: "5px" }} />
-            Last name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Last name"
-            value={this.state.lastName}
-            onChange={(e) => this.setState({ lastName: e.target.value })}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>
-            <FaEnvelope style={{ marginRight: "5px" }} />
-            Email address
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            placeholder=" Enter email"
-            value={this.state.email}
-            onChange={(e) => this.setState({ email: e.target.value })}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>
-            <FaLock style={{ marginRight: "5px" }} />
-            Password
-          </label>
-          <div className="password-input">
-            <input
-              type={this.state.showPassword ? "text" : "password"}
-              className="form-control"
-              placeholder=" Enter password"
-              value={this.state.password}
-              onChange={(e) => this.setState({ password: e.target.value })}
-            />
-            <span
-              className="password-toggle"
-              onClick={this.togglePasswordVisibility}
-            >
-              {this.state.showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-        </div>
-
-        <div className="d-grid">
-          <button className="btn btn-primary" onClick={this.signUp.bind(this)}>
-            Sign Up
-          </button>
-        </div>
-        <p className="forgot-password text-right">
-          Already registered{" "}
-          <a href="/login">
-            <FaSignInAlt style={{ marginRight: "5px" }} />
-            Login ?
-          </a>
-        </p>
-        <p className="forgot-password text-right">
-          <a href="/home">
-            <FaHome style={{ marginRight: "5px" }} />
-            Home
-          </a>
-        </p>
-      </form>
+      <div>
+        <img
+          src="https://i.ibb.co/M23HzTF/9-Qgzvh-Logo-Makr.png"
+          alt="Redirecting..."
+        />
+      </div>
     );
   }
-}
+
+  if (otpSent && !otpExpired) {
+    return (
+      <div>
+        {isProcessing && (
+          <div className="overlay">
+            <div className="processing-modal">
+              <div className="spinner"></div>
+              <p>
+                <div className="processing">Processing</div>
+                <span className="dot">.</span>
+                <span className="dot">.</span>
+                <span className="dot">.</span>
+              </p>
+            </div>
+          </div>
+        )}
+        <h2>Enter OTP</h2>
+        <form onSubmit={verifyOTP}>
+          <div className="form-group">
+            <p>Time left to verify OTP: {countdown} seconds</p>
+            <label htmlFor="otp">OTP:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="otp"
+              name="otp"
+              value={otp}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Verify OTP
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  if (otpExpired) {
+    setOtpSent(false);
+    window.location.href = "/sign-up";
+    return (
+      <div>
+        <h2>OTP Expired</h2>
+        <p>The OTP has expired. Please sign up again.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="forms">
+      <a href="/">
+        <img
+          height={100}
+          width={100}
+          src={logo}
+          alt="Tyre Logo"
+          className="tyre-logo"
+        />
+      </a>
+      <h3>
+        <FaUserLock style={{ marginRight: "5px" }} />
+        Sign Up
+      </h3>
+
+      <div className="mb-3">
+        <label>
+          <FaUser style={{ marginRight: "5px" }} />
+          First name
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="First name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>
+          <FaUser style={{ marginRight: "5px" }} />
+          Last name
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Last name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>
+          <FaEnvelope style={{ marginRight: "5px" }} />
+          Email address
+        </label>
+        <input
+          type="email"
+          className="form-control"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>
+          <FaLock style={{ marginRight: "5px" }} />
+          Password
+        </label>
+        <div className="password-input">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="form-control"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span className="password-toggle" onClick={togglePasswordVisibility}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+      </div>
+
+      <div className="d-grid">
+        <button className="btn btn-primary" onClick={signUp}>
+          Sign Up
+        </button>
+      </div>
+      <p className="forgot-password text-right">
+        Already registered{" "}
+        <a href="/login">
+          <FaSignInAlt style={{ marginRight: "5px" }} />
+          Login ?
+        </a>
+      </p>
+      <GoogleSingup />
+      <p className="forgot-password text-right">
+        <a href="/home">
+          <FaHome style={{ marginRight: "5px" }} />
+          Home
+        </a>
+      </p>
+    </form>
+  );
+};
+
+export default SignUp;

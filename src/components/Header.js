@@ -19,6 +19,7 @@ import {
 } from "./cartFunctions.js";
 
 import Search from "./Search";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [cart, setCart] = useState([]);
@@ -57,19 +58,94 @@ const Header = () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      // Retrieve user information from localStorage
       const userId = localStorage.getItem("userId");
+
       if (userId) {
-        axios.post(`${process.env.REACT_APP_API_URL}user/logout/${userId}`);
+        if (window.gapi && window.gapi.auth2) {
+          const auth2 = window.gapi.auth2.getAuthInstance();
+          if (auth2) {
+            console.log("Signing out using legacy GAPI...");
+            auth2
+              .signOut()
+              .then(() => {
+                console.log("User signed out from Google using gapi.auth2");
+              })
+              .catch((error) => {
+                console.error("Error during GAPI signOut:", error);
+              });
+          }
+        }
+
+        // Server logout logic
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}user/logout/${userId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error logging out from the server:", errorData);
+          toast.error(errorData.message || "Server logout failed.");
+          return;
+        }
+
+        // Clear local storage and navigate to login
+        console.log("Logging out from server and clearing local storage...");
         localStorage.clear();
-        Navigate("/login");
-        // window.location = `${process.env.REACT_APP_API_URL_FOR_GUI}/login`;
+        toast.success("You have been logged out successfully.");
+        window.location.href = "/login"; // Redirect to the login page
+      } else {
+        console.error(
+          "User is not logged in (userId missing in localStorage)."
+        );
       }
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error("Error during Google logout:", error);
+      toast.error("An error occurred during logout. Please try again.");
     }
   };
+
+  useEffect(() => {
+    const loadGoogleAPI = () => {
+      // Initialize the Google Identity Services API
+      window.google.accounts.id.initialize({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      });
+
+      // Render the Google Sign-In button
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-signin-btn"),
+        {
+          theme: "outline",
+          size: "large",
+        }
+      );
+
+      // Optional: Automatically prompt for sign-in if applicable
+      window.google.accounts.id.prompt();
+    };
+
+    // Check if the window object has the required gsi client
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      loadGoogleAPI();
+    } else {
+      // Load the GIS script if not already loaded
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = loadGoogleAPI;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   const addToCartVariant = async (
     product,
@@ -139,7 +215,7 @@ const Header = () => {
                         <li>
                           <p>
                             {localStorage.getItem("userEmail") ? (
-                              <a onClick={() => logout()} href="/login">
+                              <a onClick={() => logout()} href="##">
                                 Logout
                               </a>
                             ) : (

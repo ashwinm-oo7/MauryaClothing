@@ -15,6 +15,7 @@ import {
 import { toast } from "react-toastify";
 import "../css/login.css";
 import logo from "../icons/maurya.png";
+import GoogleSingup from "./GoogleSingup";
 // import { AuthContext } from "./AuthContext"; // Adjust the path
 // import axios from "axios";
 
@@ -440,6 +441,8 @@ const Login = () => {
         <FaUserPlus style={{ marginRight: "5px" }} />
         New User : <Link to="/sign-up">signup</Link>
       </p>
+      <GoogleSingup />
+
       <p className="forgot-password text-right">
         <FaHome style={{ marginRight: "5px" }} />
         <a href="/">Home</a>
