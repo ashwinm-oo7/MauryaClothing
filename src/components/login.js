@@ -206,7 +206,7 @@ const Login = () => {
         localStorage.setItem("userName", loginData.userName);
 
         toast.success("Logged in successfully", 200);
-        // window.location = "/";
+        window.location = "/";
       } else {
         if (!loginData.success && response.status === 403) {
           toast.warning(loginData.message);
