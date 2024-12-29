@@ -173,18 +173,14 @@ const Login = () => {
           body: JSON.stringify({ email, password }),
         }
       );
-      // const response = await axios.post(
-      //   process.env.REACT_APP_API_URL + "user/login",
-      //   { email, password }
-      // );
-
       const loginData = await response.json();
       setIsProcessing(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsProcessing(false);
 
+      console.log(loginData, response);
+
       if (response.ok) {
-        console.log(loginData);
         console.log("User LOGIN successfully");
         // login(loginData);
         // const redirectUrl = localStorage.getItem("redirectAfterLogin");
@@ -195,7 +191,6 @@ const Login = () => {
         // } else {
         // }
         // Navigate("/");
-        window.location = "/";
 
         // const data = await response.json();
         // const redirectUrl = data.redirectUrl || "/";
@@ -211,9 +206,14 @@ const Login = () => {
         localStorage.setItem("userName", loginData.userName);
 
         toast.success("Logged in successfully", 200);
+        // window.location = "/";
       } else {
-        toast.warning("Incorrect Credentials");
-        console.error("Failed to LOGIN user");
+        if (!loginData.success && response.status === 403) {
+          toast.warning(loginData.message);
+        } else {
+          toast.warning("Incorrect Credentials");
+          console.error("Failed to LOGIN user");
+        }
       }
     } catch (error) {
       toast.warning("Something went wrong or Server side Error");
