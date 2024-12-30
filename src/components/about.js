@@ -5,10 +5,9 @@ const About = () => {
   useEffect(() => {
     // Load the Google Maps JavaScript API script dynamically
     const googleMapScript = document.createElement("script");
-    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyABbG8N6_WctM5wgGzKdULtWJJmfKkOrW4&libraries=places`;
+    googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLEMAP_API}&libraries=places`;
     googleMapScript.async = true;
     window.document.body.appendChild(googleMapScript);
-
     // Initialize the map once the script is loaded
     googleMapScript.onload = () => {
       const mapOptions = {
