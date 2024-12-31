@@ -159,7 +159,15 @@ const ReviewList = () => {
       ) : reviews.length > 0 ? (
         <div className="product-list">
           {productId ? (
-            <h2 className="filter">
+            <h2
+              className="filter"
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#074c96",
+                color: "#bebaba",
+                fontWeight: "bold",
+              }}
+            >
               Newest Reviews for Product ${productId}00{" "}
               <input
                 style={{ borderRadius: "30px", maxWidth: "600px" }}
