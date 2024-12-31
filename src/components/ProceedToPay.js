@@ -303,7 +303,7 @@ const ProceedToPay = () => {
         setCart([]);
         setTimeout(async () => {
           await handleDownloadPDF();
-        }, 300);
+        }, 3000);
         setTimeout(() => {
           navigate("/", { replace: true });
         }, 100000);
