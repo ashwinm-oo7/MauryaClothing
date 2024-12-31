@@ -115,6 +115,9 @@ const PaymentInfo = () => {
                 display: "flex",
                 alignItems: "center",
                 padding: "10px",
+                backgroundColor: "#074c96",
+                color: "#bebaba",
+                fontWeight: "bold",
               }}
             >
               Payment Details

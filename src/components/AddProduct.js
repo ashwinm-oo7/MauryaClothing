@@ -1,12 +1,11 @@
 // AddProduct.js
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import "../css/ProductImage.css";
 import { FaTimes, FaHome, FaEdit, FaTrash } from "react-icons/fa";
-import { AuthContext } from "./AuthContext"; // Adjust the path
 
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -32,6 +31,8 @@ const AddProduct = () => {
   const [productIdToUpdate, setProductIdToUpdate] = useState(null);
   const [defaultDisabled, setDefaultDisabled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [colorOptions] = useState(["Red", "Blue", "Green", "Black", "White"]);
   const [availableSizes, setAvailableSizes] = useState([
     "S",
@@ -64,7 +65,8 @@ const AddProduct = () => {
     if (id) {
       fetchProductByProductId(id);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productIdToUpdate]);
 
   useEffect(() => {
     const isAdmin = localStorage.getItem("isAdmin");
@@ -229,6 +231,7 @@ const AddProduct = () => {
 
   const fetchProductByProductId = async (productIdToUpdate) => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}product/getProductById/${productIdToUpdate}`,
         {
@@ -272,9 +275,12 @@ const AddProduct = () => {
           );
         }
       }, 100);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product:", error);
       toast.error("Error fetching product");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -655,6 +661,19 @@ const AddProduct = () => {
   return (
     <>
       {/* <div className="add-product-container"> */}
+      {isLoading && (
+        <div className="overlay">
+          <div className="processing-modal">
+            <div className="spinner"></div>
+            <p>
+              <span className="processing">Loading</span>
+              <span className="dot">.</span>
+              <span className="dot">.</span>
+              <span className="dot">.</span>
+            </p>
+          </div>
+        </div>
+      )}
       {isAdmin ? (
         <div className="tab-buttons">
           <div className={productIdToUpdate ? "add-product-container" : ""}>

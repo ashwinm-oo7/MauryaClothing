@@ -277,7 +277,10 @@ const ProductList = () => {
                 alignItems: "center",
                 padding: "10px",
                 cursor: "pointer",
-                fontSize: "16px",
+                fontSize: "20px",
+                backgroundColor: "#074c96",
+                color: "#bebaba",
+                fontWeight: "bold",
               }}
             >
               <span title="refresh the list" onClick={fetchAllProducts}>

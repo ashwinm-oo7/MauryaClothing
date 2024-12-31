@@ -200,14 +200,16 @@
 .cart-heading {
   display: flex;
   justify-content: space-between;
-
+  background-color: #074c96;
   align-items: center;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .cart-heading-text {
   flex: 1; 
   margin-right: 25%;
+  color: #bebaba;
 }
 
 

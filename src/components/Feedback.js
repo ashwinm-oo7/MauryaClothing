@@ -139,6 +139,7 @@ const Feedback = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const indexOfLastItem = currentPage * itemsPerPage;

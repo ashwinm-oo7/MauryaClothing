@@ -710,7 +710,10 @@ const HomePage = () => {
           </div>
         </div>
       ) : (
-        <div className="" style={{ userSelect: "none" }}>
+        <div
+          className=""
+          style={{ userSelect: "none", backgroundColor: "white" }}
+        >
           {isProcessing && (
             <div className="overlay">
               <div className="processing-modal">

@@ -67,10 +67,16 @@ const Home = (props) => {
           <Route path="sign-up" element={<SignUp />} />
           <Route path="home" element={<HomePage />} />
           <Route path="about" element={<About />} />
-
-          <Route path="add-brand" element={<AddBrand />} />
-          <Route path="add-product" element={<AddProduct />} />
-          <Route path="product-list" element={<ProductList />} />
+          {isAdmin && (
+            <>
+              <Route path="add-brand" element={<AddBrand />} />
+              <Route path="add-product" element={<AddProduct />} />
+              <Route path="product-list" element={<ProductList />} />
+              <Route path="/login-record" element={<LoginRecords />} />
+              <Route path="/order-list" element={<OrderList />} />
+              <Route path="/review-list" element={<ReviewList />} />
+            </>
+          )}
           <Route path="proceedToPay" element={<ProceedToPay />} />
           <Route path="invoice-page" element={<InvoicePage />} />
           <Route path="header" element={<Header />} />
@@ -88,11 +94,9 @@ const Home = (props) => {
             element={<PaymentInfo history={history} />}
           />
 
-          <Route path="/order-list" element={<OrderList />} />
           <Route path="/pdf-download" element={<PdfDownload />} />
-          <Route path="/login-record" element={<LoginRecords />} />
+
           <Route path="/product" element={<ProductDetail />} />
-          <Route path="/review-list" element={<ReviewList />} />
           {/* Mobile Related all below */}
           <Route path="/admin-Panel-mobile" element={<AdminPanel />} />
         </Routes>

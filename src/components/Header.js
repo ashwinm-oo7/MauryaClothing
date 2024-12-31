@@ -6,10 +6,9 @@ import {
   FaUserShield,
   FaInfoCircle,
 } from "react-icons/fa";
-import axios from "axios";
 import "../css/home.css";
 import logo from "../icons/maurya.png";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   calculateTotal,
   fetchAllCart,
@@ -185,7 +184,7 @@ const Header = () => {
   };
 
   return (
-    <div className="" style={{ userSelect: "none" }}>
+    <div className="" style={{ userSelect: "none", backgroundColor: "white" }}>
       <header className="header-area header-padding-1 sticky-bar header-res-padding clearfix">
         <div className="container-fluid">
           <div className="row">
