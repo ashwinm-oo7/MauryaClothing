@@ -304,10 +304,10 @@ const ProceedToPay = () => {
       setCart([]);
       setTimeout(async () => {
         await handleDownloadPDF();
-      }, 100);
+      }, 300);
       setTimeout(() => {
         navigate("/", { replace: true });
-      }, 10000); // Delay of 3000 milliseconds (3 seconds)
+      }, 1000); // Delay of 3000 milliseconds (3 seconds)
     } catch (error) {
       console.error("Error storing payment information:", error.message);
       alert("Payment failed. Please try again later.");
