@@ -289,25 +289,28 @@ const ProceedToPay = () => {
       }
 
       resetFields(); // Reset all fields
-      const detailsResponse = await fetch(
-        `${process.env.REACT_APP_API_URL}payment/getAll?id=${paymentId}`
-      );
-
-      if (!detailsResponse.ok) {
-        throw new Error("Failed to store payment information.");
+      try {
+        const detailsResponse = await fetch(
+          `${process.env.REACT_APP_API_URL}payment/getAll?id=${paymentId}`
+        );
+        if (!detailsResponse.ok) {
+          throw new Error("Failed to store payment information.");
+        }
+        const data = await detailsResponse.json();
+        setPaymentSubmitted(true);
+        setPaymentDetails(data);
+        setIsVisiblity(false);
+        setCart([]);
+        setTimeout(async () => {
+          await handleDownloadPDF();
+        }, 300);
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 100000);
+      } catch (error) {
+        console.error("Error storing payment information:", error.message);
+        alert("Payment failed. Please try again later.");
       }
-      const data = await detailsResponse.json();
-
-      setPaymentSubmitted(true);
-      setPaymentDetails(data);
-      setIsVisiblity(false);
-      setCart([]);
-      setTimeout(async () => {
-        await handleDownloadPDF();
-      }, 300);
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 100000);
     } catch (error) {
       console.error("Error storing payment information:", error.message);
       alert("Payment failed. Please try again later.");
