@@ -122,22 +122,27 @@ const ProceedToPay = () => {
   };
 
   const handleDownloadPDF = async () => {
-    const element = document.getElementById("payment-container");
+    return new Promise((resolve, reject) => {
+      const element = document.getElementById("payment-container");
 
-    const options = {
-      filename: "MauryaInvoice.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-    try {
-      console.log("Generating PDF...");
-      await html2pdf().from(element).set(options).save();
-      console.log("PDF download triggered successfully.");
-    } catch (error) {
-      console.error("Error generating PDF:", error.message);
-      alert("Failed to download the PDF. Please try again.");
-    }
+      const options = {
+        filename: "MauryaInvoice.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      };
+      try {
+        setTimeout(async () => {
+          console.log("PDF generated");
+          await html2pdf().from(element).set(options).save();
+          console.log("PDF download triggered successfully.");
+          resolve();
+        }, 3000); // Adjust the delay as per your logic
+      } catch (error) {
+        console.error("Error generating PDF:", error.message);
+        alert("Failed to download the PDF. Please try again.");
+      }
+    });
   };
 
   const handlePayment = async () => {
@@ -334,6 +339,52 @@ const ProceedToPay = () => {
         throw new Error("Failed to store payment information.");
       }
       const data = await detailsResponse.json();
+      const data1 = data;
+      const productsInfo = data1.products
+        .map((product, index) => {
+          return `Product ${index + 1}:
+    Brand Name: ${product.brandName}
+    Model:      ${product.productName}
+    Quantity:   ${product.quantityVariant}
+    Size:       ${product.sizeVariant}
+    mrp:        ${product.mrpPriceVariant}
+    Price:      ${product.priceVariant}\n`;
+        })
+        .join("");
+
+      const splitAddress = (address) => {
+        const maxCharactersPerLine = 15;
+        const lines = [];
+        let currentLine = "";
+        address &&
+          address.split(" ").forEach((word) => {
+            if ((currentLine + word).length > maxCharactersPerLine) {
+              lines.push(currentLine.trim());
+              currentLine = "";
+            }
+            currentLine += word + " ";
+          });
+        lines.push(currentLine.trim());
+        return lines.join("\n");
+      };
+
+      // Example usage
+      const formattedDeliveryAddress = splitAddress(deliveryAddress);
+      const paymentDetails = `
+        Invoice : ${data1[0].InvoiceNumber}
+        Date: ${data1[0].createdAt}
+        OrderID: ${data1[0]._id}
+        User Email: ${userEmail}
+        Delivery Address: ${formattedDeliveryAddress}
+        Payment Method: ${paymentMethod}
+        UpiApp :${selectedUPIApp}
+        Products:
+        ${productsInfo}
+    
+        Final Amount: ${finalAmount}
+    `;
+      console.log("PAYMENTDETAILS", paymentDetails);
+
       setPaymentSubmitted(true);
       setPaymentDetails(data);
       setIsVisiblity(false);
