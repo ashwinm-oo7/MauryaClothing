@@ -228,7 +228,7 @@ const ProceedToPay = () => {
     setIsProcessing(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsProcessing(false);
-
+    let paymentId;
     try {
       const response = await fetch(
         process.env.REACT_APP_API_URL + "payment/add",
@@ -271,7 +271,7 @@ const ProceedToPay = () => {
         }
       );
       const res = await response.json();
-      const { paymentId } = res;
+      paymentId = res.paymentId;
       console.log("Response status:", res);
 
       if (!response.ok) {
@@ -303,7 +303,7 @@ const ProceedToPay = () => {
     }
     try {
       const response = await fetch(
-        process.env.REACT_APP_API_URL + "payment/getAll"
+        `${process.env.REACT_APP_API_URL}payment/getAll?id=${paymentId}`
       );
       const data = await response.json();
       const data1 = data.reverse();
