@@ -306,9 +306,9 @@ const ProceedToPay = () => {
         `${process.env.REACT_APP_API_URL}payment/getAll?id=${paymentId}`
       );
       const data = await response.json();
-      const data1 = data.reverse();
-      console.log("Now", data1[0]);
-      const productsInfo = data1[0].products
+      const data1 = data;
+      console.log("Now", data1);
+      const productsInfo = data1.products
         .map((product, index) => {
           return `Product ${index + 1}:
     Brand Name: ${product.brandName}
@@ -339,9 +339,9 @@ const ProceedToPay = () => {
       // Example usage
       const formattedDeliveryAddress = splitAddress(deliveryAddress);
       const paymentDetails = `
-        Invoice : ${data1[0].InvoiceNumber}
-        Date: ${data1[0].createdAt}
-        OrderID: ${data1[0]._id}
+        Invoice : ${data1.InvoiceNumber}
+        Date: ${data1.createdAt}
+        OrderID: ${data1._id}
         User Email: ${userEmail}
         Delivery Address: ${formattedDeliveryAddress}
         Payment Method: ${paymentMethod}
@@ -353,7 +353,7 @@ const ProceedToPay = () => {
     `;
       console.log("PAYMENTDETAILS", paymentDetails);
       setPaymentSubmitted(true);
-      setPaymentDetails(data1[0]);
+      setPaymentDetails(data1);
       setIsVisiblity(false);
       setCart([]);
       setTimeout(async () => {
