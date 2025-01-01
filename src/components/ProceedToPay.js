@@ -291,10 +291,6 @@ const ProceedToPay = () => {
       } else {
         localStorage.removeItem("cart");
       }
-      if (location.state) {
-        location.state = {};
-      }
-
       resetFields(); // Reset all fields
       // try {
       //   const detailsResponse = await fetch(
@@ -320,6 +316,9 @@ const ProceedToPay = () => {
       //   alert("Payment failed. Please try again later.");
       // }
       await fetchRecords(paymentId);
+      if (location.state) {
+        location.state = {};
+      }
     } catch (error) {
       console.error("Error storing payment information:", error.message);
       alert("Payment failed. Please try again later.");
