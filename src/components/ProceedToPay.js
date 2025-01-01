@@ -297,36 +297,74 @@ const ProceedToPay = () => {
         localStorage.removeItem("cart");
       }
       resetFields(); // Reset all fields
-      // try {
-      //   const detailsResponse = await fetch(
-      //     `${process.env.REACT_APP_API_URL}payment/getAll?id=${paymentId}`
-      //   );
-      //   if (!detailsResponse.ok) {
-      //     throw new Error("Failed to store payment information.");
-      //   }
-      //   const data = await detailsResponse.json();
-      //   setPaymentSubmitted(true);
-      //   setPaymentDetails(data);
-      //   setIsVisiblity(false);
-      //   setCart([]);
-
-      //   setTimeout(async () => {
-      //     await handleDownloadPDF();
-      //   }, 5000);
-      //   setTimeout(() => {
-      //     navigate("/", { replace: true });
-      //   }, 10000);
-      // } catch (error) {
-      //   console.error("Error storing payment information:", error.message);
-      //   alert("Payment failed. Please try again later.");
-      // }
-      await fetchRecords(paymentId);
-      if (location.state) {
-        location.state = {};
-      }
     } catch (error) {
       console.error("Error storing payment information:", error.message);
       alert("Payment failed. Please try again later.");
+    }
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + "payment/getAll"
+      );
+      const data = await response.json();
+      const data1 = data.reverse();
+      console.log("Now", data1[0]);
+      const productsInfo = data1[0].products
+        .map((product, index) => {
+          return `Product ${index + 1}:
+    Brand Name: ${product.brandName}
+    Model:      ${product.productName}
+    Quantity:   ${product.quantityVariant}
+    Size:       ${product.sizeVariant}
+    mrp:        ${product.mrpPriceVariant}
+    Price:      ${product.priceVariant}\n`;
+        })
+        .join("");
+
+      const splitAddress = (address) => {
+        const maxCharactersPerLine = 15;
+        const lines = [];
+        let currentLine = "";
+        address &&
+          address.split(" ").forEach((word) => {
+            if ((currentLine + word).length > maxCharactersPerLine) {
+              lines.push(currentLine.trim());
+              currentLine = "";
+            }
+            currentLine += word + " ";
+          });
+        lines.push(currentLine.trim());
+        return lines.join("\n");
+      };
+
+      // Example usage
+      const formattedDeliveryAddress = splitAddress(deliveryAddress);
+      const paymentDetails = `
+        Invoice : ${data1[0].InvoiceNumber}
+        Date: ${data1[0].createdAt}
+        OrderID: ${data1[0]._id}
+        User Email: ${userEmail}
+        Delivery Address: ${formattedDeliveryAddress}
+        Payment Method: ${paymentMethod}
+        UpiApp :${selectedUPIApp}
+        Products:
+        ${productsInfo}
+    
+        Final Amount: ${finalAmount}
+    `;
+      console.log("PAYMENTDETAILS", paymentDetails);
+      setPaymentSubmitted(true);
+      setPaymentDetails(data1[0]);
+      setIsVisiblity(false);
+      setCart([]);
+      setTimeout(async () => {
+        await handleDownloadPDF();
+      }, 100); // Wait for 100 milliseconds
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 10000); // Delay of 3000 milliseconds (3 seconds)
+    } catch (fetchError) {
+      console.error("Error fetching payment details:", fetchError.message);
+      alert("Could not retrieve payment details. Please try again later.");
     }
   };
 
