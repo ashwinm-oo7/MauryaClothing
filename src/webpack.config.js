@@ -8,10 +8,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: "/", // Adjust as per your project setup
-    clean: true, // Cleans the output directory before each build
+    publicPath: "/",
+    clean: true,
   },
-  mode: "production", // Use "development" for debugging
+  mode: "production",
 
   // Enable source maps in development only
   devtool: process.env.NODE_ENV === "development" ? "source-map" : false,
