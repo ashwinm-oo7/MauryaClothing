@@ -361,7 +361,7 @@ const ProceedToPay = () => {
       }, 100); // Wait for 100 milliseconds
       setTimeout(() => {
         navigate("/", { replace: true });
-      }, 10000); // Delay of 3000 milliseconds (3 seconds)
+      }, 10000);
     } catch (fetchError) {
       console.error("Error fetching payment details:", fetchError.message);
       alert("Could not retrieve payment details. Please try again later.");
