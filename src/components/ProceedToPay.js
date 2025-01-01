@@ -130,7 +130,14 @@ const ProceedToPay = () => {
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
-    html2pdf().from(element).set(options).save();
+    try {
+      console.log("Generating PDF...");
+      await html2pdf().from(element).set(options).save();
+      console.log("PDF download triggered successfully.");
+    } catch (error) {
+      console.error("Error generating PDF:", error.message);
+      alert("Failed to download the PDF. Please try again.");
+    }
   };
 
   const handlePayment = async () => {
@@ -301,12 +308,13 @@ const ProceedToPay = () => {
         setPaymentDetails(data);
         setIsVisiblity(false);
         setCart([]);
+
         setTimeout(async () => {
           await handleDownloadPDF();
         }, 5000);
         setTimeout(() => {
           navigate("/", { replace: true });
-        }, 100000);
+        }, 10000);
       } catch (error) {
         console.error("Error storing payment information:", error.message);
         alert("Payment failed. Please try again later.");

@@ -187,7 +187,15 @@ const ReviewList = () => {
               />
             </h2>
           ) : (
-            <h2 className="filter">
+            <h2
+              className="filter"
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#074c96",
+                color: "#bebaba",
+                fontWeight: "bold",
+              }}
+            >
               Newest of All Reviews{" "}
               <input
                 style={{ borderRadius: "30px", maxWidth: "600px" }}
