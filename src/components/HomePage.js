@@ -388,7 +388,7 @@ const HomePage = () => {
                 <div className="product-wrap mb-25">
                   <div
                     className="product-img products-img"
-                    style={{ userSelect: "none" }}
+                    style={{ userSelect: "" }}
                     onClick={() => handleProductClick(prod)}
                   >
                     <Link to={`/product?id=${prod._id}`} key={index}>
@@ -710,10 +710,7 @@ const HomePage = () => {
           </div>
         </div>
       ) : (
-        <div
-          className=""
-          style={{ userSelect: "none", backgroundColor: "white" }}
-        >
+        <div className="" style={{ userSelect: "", backgroundColor: "white" }}>
           {isProcessing && (
             <div className="overlay">
               <div className="processing-modal">

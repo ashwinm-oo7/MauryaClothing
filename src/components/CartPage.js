@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes, FaMinus, FaPlus, FaTrash, FaSyncAlt } from "react-icons/fa";
 import "../css/Cart/CartPage.css";
-// import ProceedToPay from "./ProceedToPay.js";
 import { SizeChart, SizeGuide, SecureTransaction } from "./OfferDetails";
 import OfferDiscounts from "./OfferDiscounts.js";
 import ChatBox from "./ChatBox";
@@ -30,7 +29,6 @@ const CartPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleProceedToPayClick = () => {
-    // Navigate to ProceedToPay page with the necessary state
     navigate("/proceedToPay", {
       state: {
         SubTotal,
@@ -62,22 +60,7 @@ const CartPage = () => {
     return cart.find((item) => item._id === productId);
   };
 
-  // const addToCart = (product, setSelectedSizes) => {
-  //   const selectedSizess =
-  //     selectedSizes[product._id] || getProductDefaultSize(product._id, product);
-  //   console.log("addToCart", selectedSizes, product);
-  //   if (selectedSizess) {
-  //     handleAddToCart(product, cart, setCart, selectedSizess, setSelectedSizes);
-  //   } else {
-  //     alert("Please select a Size");
-  //   }
-  // };
-
-  // const { variantPrice, variantMrpPrice, cartVariantQuantity } =
-  //   useProductVariantDetails("product", selectedColor, selectedSizeVariants);
-
   const addToCartVariant = async (product) => {
-    // const selectedVariant = getVariantDetails();
     const variant = product.variant;
     if (!product.selectedSizes && product.selectedColor) {
       alert("Please select a valid size and color");
@@ -99,27 +82,7 @@ const CartPage = () => {
     );
     setIsProcessing(false);
   };
-  // const findVariantCartItem = (productId, selectedColor, selectedSize) => {
-  //   return cart.find(
-  //     (item) =>
-  //       item._id === productId &&
-  //       item.selectedColor === selectedColor &&
-  //       item.selectedSizes === selectedSize
-  //   );
-  // };
 
-  // const variantCartItem = findVariantCartItem(
-  //   // product._id,
-  //   selectedColor,
-  //   selectedSizeVariants
-  // );
-  // const variantCartQuantity = variantCartItem
-  //   ? variantCartItem.variantQuantity
-  //   : 0;
-  // // Ensure variantCartItem exists and has a variant object
-  // const isVariantCartQuantityMaxed = variantCartItem?.variant?.quantity
-  //   ? variantCartQuantity >= variantCartItem.variant.quantity
-  //   : false;
   let totalQuantity = 0;
   cart.forEach((item) => {
     totalQuantity += item.variantQuantity;
@@ -373,39 +336,16 @@ const CartPage = () => {
                   </span>
                 </div>
                 <SecureTransaction />
-                {/* <div
-                  className=""
-                  style={{ marginLeft: "20px", marginBottom: "20px" }}
-                >
-                  <ProceedToPay
-                    SubTotal={SubTotal}
-                    finalAmount={finalAmountToPay}
-                    Tax={Tax}
-                    cart={cart}
-                    size={selectedSizes}
-                    onProceed={handleProceedToPayClick}
-                  />
-                </div> */}
               </div>
             </div>
           )}
           <div
             className="total-item"
             style={{
-              // marginLeft: "20px",
-              // marginBottom: "20px",
               paddingBottom: "20px",
             }}
           >
             <strong className="">
-              {/* <ProceedToPay
-                SubTotal={SubTotal}
-                finalAmount={finalAmountToPay}
-                Tax={Tax}
-                cart={cart}
-                size={selectedSizes}
-                onProceed={handleProceedToPayClick}
-              /> */}
               <button onClick={handleProceedToPayClick}>Proceed to pay</button>
             </strong>
           </div>
